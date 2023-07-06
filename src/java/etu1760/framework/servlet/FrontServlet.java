@@ -6,6 +6,7 @@
 package etu1760.framework.servlet;
 
 import etu.framework.Mapping;
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.HashMap;
+import util.Fonction;
 
 /**
  *
@@ -35,15 +37,21 @@ public class FrontServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet FrontServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet FrontServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            String url = request.getRequestURI();
+            int last = url.lastIndexOf("/");
+            String annotation = url.substring(last+1);
+        
+            int noDo = annotation.lastIndexOf(".");
+            String tsisyDo = annotation.substring(0, noDo);
+        
+            ServletContext servletContext = getServletContext();
+            
+            Fonction fonction = new Fonction();
+            
+            String[] allPack = fonction.getAllPackages(servletContext);
+            HashMap<String,Mapping> hashmap = fonction.insertMapping(allPack, tsisyDo, mappingUrls,out);
+        
+          
         }
     }
 
