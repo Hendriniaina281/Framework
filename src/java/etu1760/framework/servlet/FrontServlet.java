@@ -5,6 +5,7 @@
  */
 package etu1760.framework.servlet;
 
+import emp.Emp;
 import etu.framework.Mapping;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,12 +71,25 @@ public class FrontServlet extends HttpServlet {
                         Class<?> typeRetour = m.getReturnType();
                     
                         String retour = typeRetour.getName();
-                    
+                        
                         if(retour.equals("modelView.ModelView")){
                             ModelView mv = (ModelView)m.invoke(instance);
                             
-                            for(Map.Entry<String,Object> me:mv.getData().entrySet()){
+                            /*for(Map.Entry<String,Object> me:mv.getData().entrySet()){
                                 request.setAttribute("nom", me.getValue());
+                            }*/
+                            Field[] field = instance.getClass().getDeclaredFields();
+                            fonction.setAttributSprint7(request, instance, out);
+                            
+                            for(int i = 0;i<field.length;i++){
+                                char c = field[i].getName().charAt(0);
+                                String fieldName = Character.toUpperCase(c)+field[i].getName().substring(1);
+                                
+                                Method method = instance.getClass().getMethod("get"+fieldName);
+                                
+                                String string = (String)method.invoke(instance);
+                                
+                                request.setAttribute(field[i].getName(),string);
                             }
                             
                             RequestDispatcher rd = request.getRequestDispatcher(mv.getUrl());

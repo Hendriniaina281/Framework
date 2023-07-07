@@ -8,8 +8,10 @@ package util;
 import annotation.Annotation;
 import etu.framework.Mapping;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -122,6 +124,29 @@ public class Fonction {
         }
          
         return mappingUrls;
+    }
+    
+    public void setAttributSprint7(HttpServletRequest request,Object objet,PrintWriter out) throws Exception{
+        Field[] field = objet.getClass().getDeclaredFields();
+      
+        for(int i = 0;i<field.length;i++){
+            char c = field[i].getName().charAt(0);
+            String fieldName = Character.toUpperCase(c)+field[i].getName().substring(1);
+            
+            String value = request.getParameter(field[i].getName());
+           
+            if((value != null)){
+                if(field[i].getType().isAssignableFrom(Integer.class)){
+                    //int v = Integer.parseInt(value);
+                    Method m = objet.getClass().getMethod("set"+fieldName,Integer.class);
+                    m.invoke(objet, value);
+                     
+                }else if(field[i].getType().isAssignableFrom(java.lang.String.class)){
+                    Method m = objet.getClass().getMethod("set"+fieldName,String.class);
+                    m.invoke(objet, value);
+                }
+            }
+        }
     }
     
 }

@@ -19,6 +19,11 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1><% out.print(nom);%></h1>
+        <form action="find.do">
+            <h1>Nom:<input type="text" name="nom"></h1>
+            <input type="submit" value="Valider">
+        </form>
+        
+        <p>nom:<% out.print(nom);%></p>
     </body>
 </html>

@@ -29,7 +29,7 @@ public class Emp {
         ModelView m = new ModelView();
         m.setUrl("/Data.jsp");
         
-        m.addItem("nom", "Hendry");
+        //m.addItem("nom", "Hendry");
         
         return m;
     }
