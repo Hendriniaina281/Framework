@@ -100,7 +100,7 @@ public class Fonction {
                 for (Method method : methods) {
                     if (method.isAnnotationPresent(Annotation.class)) {
                         Annotation annotation = method.getAnnotation(Annotation.class);
-                        String uniqueKey = annotationName + "_" + UUID.randomUUID().toString();
+                        //String uniqueKey = annotationName + "_" + UUID.randomUUID().toString();
                         //out.print("omenao "+annotationName);
         
                         
@@ -110,7 +110,7 @@ public class Fonction {
                             mapping.setClassName(newCl[s].getName());
                             mapping.setMethod(method.getName());
                             
-                            mappingUrls.put(uniqueKey, mapping);
+                            mappingUrls.put(annotationName, mapping);
                             
                         }
                     }

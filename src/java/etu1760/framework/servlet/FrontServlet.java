@@ -6,6 +6,7 @@
 package etu1760.framework.servlet;
 
 import etu.framework.Mapping;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +14,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static jdk.nashorn.internal.codegen.CompilerConstants.className;
+import modelView.ModelView;
 import util.Fonction;
 
 /**
@@ -33,25 +41,50 @@ public class FrontServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws Exception {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String url = request.getRequestURI();
             int last = url.lastIndexOf("/");
             String annotation = url.substring(last+1);
-        
-            int noDo = annotation.lastIndexOf(".");
-            String tsisyDo = annotation.substring(0, noDo);
-        
+            
             ServletContext servletContext = getServletContext();
             
             Fonction fonction = new Fonction();
             
             String[] allPack = fonction.getAllPackages(servletContext);
-            HashMap<String,Mapping> hashmap = fonction.insertMapping(allPack, tsisyDo, mappingUrls,out);
-        
-          
+            HashMap<String,Mapping> hashmap = fonction.insertMapping(allPack, annotation, mappingUrls,out);
+            
+            try{
+            for(Map.Entry<String,Mapping> mapp:hashmap.entrySet()){
+                 if(mapp.getKey().equals(annotation)){
+                        String className = mapp.getValue().getClassName();
+                        Class<?> clazz = Class.forName(className);
+                        Object instance = clazz.newInstance();
+            
+                        Class<?> myClass = instance.getClass();
+                        Method m = clazz.getMethod(mapp.getValue().getMethod());
+                    
+                        Class<?> typeRetour = m.getReturnType();
+                    
+                        String retour = typeRetour.getName();
+                    
+                        if(retour.equals("modelView.ModelView")){
+                            ModelView mv = (ModelView)m.invoke(instance);
+                            //out.print(mv.getUrl());
+                            
+                            RequestDispatcher rd = request.getRequestDispatcher(mv.getUrl());
+                            rd.forward(request, response);
+                        }
+                     
+                    
+                 }
+            }
+            }catch(Exception ex){
+                out.print(ex);
+            }
+            
         }
     }
 
@@ -67,7 +100,11 @@ public class FrontServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(FrontServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -81,7 +118,11 @@ public class FrontServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(FrontServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

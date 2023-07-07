@@ -6,14 +6,19 @@
 package emp;
 
 import annotation.Annotation;
+import modelView.ModelView;
 
 /**
  *
  * @author P15A-13-Hendry
  */
 public class Emp {
-    @Annotation(url = "find")
-    public void print(){
-        System.out.println("test framework");
+    @Annotation(url = "find.do")
+    public ModelView testModel(){
+        ModelView m = new ModelView();
+        m.setUrl("/Data.jsp");
+        
+        return m;
     }
+    
 }
