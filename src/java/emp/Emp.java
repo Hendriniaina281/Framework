@@ -13,10 +13,23 @@ import modelView.ModelView;
  * @author P15A-13-Hendry
  */
 public class Emp {
+    String nom;
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+    
+    
     @Annotation(url = "find.do")
     public ModelView testModel(){
         ModelView m = new ModelView();
         m.setUrl("/Data.jsp");
+        
+        m.addItem("nom", "Hendry");
         
         return m;
     }

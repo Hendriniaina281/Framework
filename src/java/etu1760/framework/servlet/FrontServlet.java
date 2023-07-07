@@ -72,7 +72,10 @@ public class FrontServlet extends HttpServlet {
                     
                         if(retour.equals("modelView.ModelView")){
                             ModelView mv = (ModelView)m.invoke(instance);
-                            //out.print(mv.getUrl());
+                            
+                            for(Map.Entry<String,Object> me:mv.getData().entrySet()){
+                                request.setAttribute("nom", me.getValue());
+                            }
                             
                             RequestDispatcher rd = request.getRequestDispatcher(mv.getUrl());
                             rd.forward(request, response);
@@ -82,7 +85,8 @@ public class FrontServlet extends HttpServlet {
                  }
             }
             }catch(Exception ex){
-                out.print(ex);
+                Throwable cause = ex.getCause();
+                out.print(cause);
             }
             
         }

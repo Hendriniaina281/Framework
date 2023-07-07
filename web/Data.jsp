@@ -4,6 +4,13 @@
     Author     : P15A-13-Hendry
 --%>
 
+<%@page import="modelView.ModelView"%>
+
+<%
+    ModelView m = (ModelView)request.getAttribute("modelView");
+    String nom = (String)request.getAttribute("nom");
+    
+%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,6 +19,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <h1><% out.print(nom);%></h1>
     </body>
 </html>
