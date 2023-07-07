@@ -14,7 +14,7 @@ import modelView.ModelView;
  */
 public class Emp {
     String nom;
-
+    
     public String getNom() {
         return nom;
     }
@@ -24,12 +24,12 @@ public class Emp {
     }
     
     
-    @Annotation(url = "find.do")
-    public ModelView testModel(){
+    @Annotation(url = "find.do",attribut="nom")
+    public ModelView testModel(String nom){
         ModelView m = new ModelView();
         m.setUrl("/Data.jsp");
         
-        //m.addItem("nom", "Hendry");
+        m.addItem("nom", this.getNom());
         
         return m;
     }

@@ -16,4 +16,5 @@ import java.lang.annotation.*;
 
 public @interface Annotation {
     String url();
+    String attribut();
 }

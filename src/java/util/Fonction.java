@@ -149,4 +149,31 @@ public class Fonction {
         }
     }
     
+    public void setAttributSprint8(HttpServletRequest request,Object objet,PrintWriter out) throws Exception{
+        Field[] field = objet.getClass().getDeclaredFields();
+        
+        for(int i = 0;i<field.length;i++){
+            char c = field[i].getName().charAt(0);
+            String fieldName = Character.toUpperCase(c)+field[i].getName().substring(1);
+            
+            Method[] m = objet.getClass().getDeclaredMethods();
+            for (Method method : m) {
+                if(method.isAnnotationPresent(Annotation.class)){
+                    Annotation annotation = method.getAnnotation(Annotation.class);
+                    if(field[i].getName().equals(annotation.attribut())){
+                        String value = request.getParameter(field[i].getName());
+                        
+                        if(value!=null){
+                            Method me = objet.getClass().getMethod("set"+fieldName,String.class);
+                            me.invoke(objet, value);
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+       
+    }
+    
 }

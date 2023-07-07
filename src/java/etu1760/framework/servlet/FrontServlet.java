@@ -66,20 +66,18 @@ public class FrontServlet extends HttpServlet {
                         Object instance = clazz.newInstance();
             
                         Class<?> myClass = instance.getClass();
-                        Method m = clazz.getMethod(mapp.getValue().getMethod());
+                        Method m = clazz.getMethod(mapp.getValue().getMethod(),String.class);
                     
                         Class<?> typeRetour = m.getReturnType();
                     
                         String retour = typeRetour.getName();
-                        
+                       
                         if(retour.equals("modelView.ModelView")){
-                            ModelView mv = (ModelView)m.invoke(instance);
+                            ModelView mv = (ModelView)m.invoke(instance,(String) null);
                             
-                            /*for(Map.Entry<String,Object> me:mv.getData().entrySet()){
-                                request.setAttribute("nom", me.getValue());
-                            }*/
+                            
                             Field[] field = instance.getClass().getDeclaredFields();
-                            fonction.setAttributSprint7(request, instance, out);
+                            fonction.setAttributSprint8(request, instance, out);
                             
                             for(int i = 0;i<field.length;i++){
                                 char c = field[i].getName().charAt(0);
